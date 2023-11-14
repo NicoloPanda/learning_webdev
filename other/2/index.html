@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gantt Chart Visualization</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            padding-top: 20px;
+        }
+        #gantt-chart {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            min-height: 300px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gantt Chart Visualization</h1>
+        <p>Upload your CSV file to visualize the Gantt chart.</p>
+        
+        <div class="custom-file mb-3">
+            <input type="file" class="custom-file-input" id="fileInput" aria-describedby="fileHelp">
+            <label class="custom-file-label" for="fileInput">Choose file</label>
+        </div>
+        
+        <button class="btn btn-primary" id="uploadBtn">Upload</button>
+
+        <div id="gantt-chart">
+            <p class="text-center pt-5">Gantt chart will be displayed here</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // JavaScript to update the label of the file input
+        $('.custom-file-input').on('change', function() { 
+            let fileName = $(this).val().split('\\').pop(); 
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    
+        // Function to handle file upload and parsing
+        function handleFileUpload() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+    
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    console.log("File content:", text); // Check file content
+                    parseMachineCSV(text);
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Please select a file to upload.');
+            }
+        }
+    
+        // Function to parse CSV data for machine.csv
+        function parseMachineCSV(csvData) {
+            console.log("Parsing CSV data"); // Check if parsing starts
+            const lines = csvData.split('\n');
+            const machines = [];
+    
+            lines.forEach((line, index) => {
+                if(index === 0) return; // Skip header line
+                const data = line.split(';');
+                if(data.length === 5) {
+                    machines.push({
+                        machineId: data[0],
+                        shortName: data[1],
+                        description: data[2],
+                        effectivity: data[3] === 'NULL' ? '' : data[3],
+                        machineAlternativityGroup: data[4] === 'NULL' ? '' : parseInt(data[4], 10) // Parsing as integer
+                    });
+                }
+            });
+    
+            console.log("Parsed machines:", machines); // Check parsed data
+            visualizeMachines(machines);
+        }
+    
+        // Function to visualize machine data
+        function visualizeMachines(machines) {
+            console.log("Visualizing machines"); // Check visualization
+            let content = '<ul>';
+    
+            machines.forEach(machine => {
+                content += `<li>ID: ${machine.machineId}, Name: ${machine.shortName}, Description: ${machine.description}, Effectivity: ${machine.effectivity}, Group: ${machine.machineAlternativityGroup}</li>`;
+            });
+    
+            content += '</ul>';
+            document.getElementById('gantt-chart').innerHTML = content; // Placeholder element for visualization
+        }
+    
+        // Event listener for the upload button
+        document.getElementById('uploadBtn').addEventListener('click', handleFileUpload);
+    </script>     
+</body>
+</html>
