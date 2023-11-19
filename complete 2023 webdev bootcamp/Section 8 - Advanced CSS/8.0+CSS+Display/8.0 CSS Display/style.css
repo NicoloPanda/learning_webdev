@@ -1,0 +1,22 @@
+p {
+    color: white;
+    display: inline-block; /* block for goal 2*/
+  }
+
+  .red {
+    width: 200px;
+    height: 200px;
+    background-color: red;
+  }
+
+  .green {
+    width: 200px;
+    height: 200px;
+    background-color: green;
+  }
+
+  .blue {
+    width: 200px;
+    height: 200px;
+    background-color: blue;
+  }
