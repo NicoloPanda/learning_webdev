@@ -1,0 +1,16 @@
+.grid-even-columns {
+    display: grid;
+    /* gap: 1rem; */   
+}
+
+@media (min-width: 40em) {
+    .grid-even-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 60em) {
+    .grid-even-columns {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
